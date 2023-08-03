@@ -3,10 +3,11 @@ import { SafeArea } from "../../../components/utility/safe-area.component";
 
 import { CategoryList } from "../components/category-list.component";
 
-export const CategoryScreen = () => {
+export const CategoryScreen = ({ navigation }) => {
+    
     return(
         <SafeArea>
-            <CategoryList />
+            <CategoryList navigation={navigation}/>
         </SafeArea>
     )
 }

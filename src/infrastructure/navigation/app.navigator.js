@@ -8,6 +8,8 @@ import { CameraScreen } from "../../features/camera/screen/camera.screen";
 import { AccountScreen } from "../../features/account/screen/account.screen";
 import { CategoryScreen } from "../../features/products/screen/category.screen";
 
+import { ProductNavigator } from "./product.navigator";
+
 const Tab = createBottomTabNavigator();
 
 const TAB_ICON = {
@@ -35,7 +37,7 @@ export const AppNavigator = () => {
                     inactiveTintColor: "gray",
                 }}
             >
-                <Tab.Screen name="Category" component={CategoryScreen} />
+                <Tab.Screen name="Category" component={ProductNavigator} />
                 <Tab.Screen name="Camera" component={CameraScreen} />
                 <Tab.Screen name="Account" component={AccountScreen} />
             </Tab.Navigator>
