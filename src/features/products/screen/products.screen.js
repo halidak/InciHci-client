@@ -3,6 +3,7 @@ import { SafeArea } from "../../../components/utility/safe-area.component";
 import { ProductComponents } from "../components/products.component";
 import { useRoute } from "@react-navigation/native";
 import { Search } from "../components/search.component";
+import { ProductContextProvider } from "../../../services/product/product.context";
 
 export const ProductsScreen = ({ navigation }) => {
   const route = useRoute();
@@ -11,7 +12,9 @@ export const ProductsScreen = ({ navigation }) => {
   return (
     <SafeArea>
         <Search/>
+        <ProductContextProvider categoryId={categoryId}>
       <ProductComponents categoryId={categoryId} />
+        </ProductContextProvider>
     </SafeArea>
   );
 };

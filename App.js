@@ -3,14 +3,18 @@ import { StyleSheet, Text, View } from 'react-native';
 import { AccountScreen } from './src/features/account/screen/account.screen';
 import { Navigator } from './src/infrastructure/navigation';
 import { CategoryContextProvider } from './src/services/category/category.context';
+import { ThemeProvider } from 'styled-components/native';
+import { theme } from './src/infrastructure/theme';
 
 export default function App() {
   return (
     <>
+    <ThemeProvider theme={theme}>
     <CategoryContextProvider>
     <Navigator />
       <StatusBar style="auto" />
     </CategoryContextProvider>
+    </ThemeProvider>
     </>
   );
 }

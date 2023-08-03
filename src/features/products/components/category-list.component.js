@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Text, ScrollView } from "react-native";
+import { Text, ScrollView, ActivityIndicator } from "react-native";
 import { List } from "react-native-paper";
 import { CategoryContext } from "../../../services/category/category.context";
 import styled from "styled-components/native";
@@ -25,7 +25,11 @@ const ArrowIcon = styled(List.Icon).attrs({
 `;
 
 export const CategoryList = ({navigation}) => {
-  const { categories } = useContext(CategoryContext);
+  const { categories, isLoading } = useContext(CategoryContext);
+
+  if (isLoading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+}
 
   return (
     <ScrollView>
