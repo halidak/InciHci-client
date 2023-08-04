@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { getProductById, AverageRating } from "./product-details.service";
+import { getProductById, AverageRating, fetchCompositions } from "./product-details.service";
 
 export const ProductDetailsContext = createContext();
 
@@ -8,6 +8,8 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [rating, setRating] = useState(0);
+  const [compositions, setCompositions] = useState([]);
+
 
   const fetchProduct = async (productId) => {
     try {
@@ -39,9 +41,25 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
     }
   };
 
+  const getCompositions = async (productId) => {
+    try {
+      setIsLoading(true);
+      const response = await fetchCompositions(productId);
+      setIsLoading(false);
+      setCompositions(response);
+      return response;
+    } catch (err) {
+      console.error("Error fetching product compositions by ID:", err);
+      setError(err);
+      setIsLoading(false);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     // Pozivamo funkciju getRating unutar useEffect s pravim productId
     getRating(productId);
+    getCompositions(productId);
   }, [productId]);
 
   return (
@@ -53,6 +71,8 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
         productDetails,
         rating,
         getRating,
+        compositions,
+        getCompositions,
       }}
     >
       {children}

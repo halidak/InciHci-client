@@ -3,18 +3,25 @@ import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { SafeArea } from "../../../components/utility/safe-area.component";
 import { ProductDetailsContext } from "../../../services/product/product-details.context";
 import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, ProductScrollView, EmptyProductMessage} from "./product.style";
+import { RatingComponent } from "./rating.component";
+import { List } from "react-native-paper";
+
 
 export const ProductDetailsComponent = ({ productId }) => {
-  const { fetchProduct, isLoading, productDetails, getRating, rating } = useContext(ProductDetailsContext); 
+  const { fetchProduct, isLoading, productDetails, getRating, rating,  compositions, getCompositions } = useContext(ProductDetailsContext); 
+  const [compositionsExpanded, setCompositionsExpanded] = useState(false);
 
   useEffect(() => {
     fetchProduct(productId);
     getRating(productId);
+    getCompositions(productId);
   }, [productId]);
 
   console.log("Rating:", rating);
+  //console.log('Product Details:', productDetails);
+  console.log('Compositions:', compositions);
 
-  // console.log(productDetails);
+ 
 
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -24,7 +31,7 @@ export const ProductDetailsComponent = ({ productId }) => {
     <SafeArea>
       {productDetails ? (
          <ProductScrollView>
-             <ProductCard elevation={5} key={productDetails._id}>
+             <ProductCard elevation={1} key={productDetails._id}>
                  <View>
                      <RestaurantCardCover source={{ uri: productDetails.image }} />
                  </View>
@@ -35,6 +42,7 @@ export const ProductDetailsComponent = ({ productId }) => {
                              <Text>{productDetails.company}</Text>
                          </Row>
                      </Open>
+                     <RatingComponent rating={rating} />
                      <Open>
                          <Row>
                              <Text>{productDetails.description}</Text>
@@ -42,6 +50,13 @@ export const ProductDetailsComponent = ({ productId }) => {
                      </Open>
                  </Info>
              </ProductCard>
+              <List.Accordion
+                title="Compositions"
+                left={(props) => <List.Icon {...props} icon="flower" />}>
+                {compositions.map((composition) => (
+                  <List.Item title={composition.name} />
+                ))}
+              </List.Accordion>
      </ProductScrollView>
       ) : (
         <Text>No product details available.</Text>

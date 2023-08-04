@@ -24,3 +24,15 @@ export const getProductById = async (productId) => {
         throw err;
     }
   }
+
+  export const fetchCompositions = async (productId) => {
+    try {
+        const response = await axios.get(`${API_URL}/compositions/getCompositions/${productId}`);
+        console.log("Compositions", response.data);
+        return response.data;
+    }
+    catch (err) {
+        console.error('Error fetching compositions:', err);
+        throw err;
+    }
+  }
