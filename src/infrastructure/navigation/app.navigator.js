@@ -37,7 +37,7 @@ export const AppNavigator = () => {
                     inactiveTintColor: "gray",
                 }}
             >
-                <Tab.Screen name="Category" component={ProductNavigator} />
+                <Tab.Screen name="Category" component={ProductNavigator}  options={{ headerShown: false }} />
                 <Tab.Screen name="Camera" component={CameraScreen} />
                 <Tab.Screen name="Account" component={AccountScreen} />
             </Tab.Navigator>

@@ -13,7 +13,7 @@ export const ProductsScreen = ({ navigation }) => {
     <SafeArea>
         <Search/>
         <ProductContextProvider categoryId={categoryId}>
-      <ProductComponents categoryId={categoryId} />
+      <ProductComponents categoryId={categoryId} navigation={ navigation }/>
         </ProductContextProvider>
     </SafeArea>
   );

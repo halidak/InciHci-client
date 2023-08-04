@@ -1,68 +1,29 @@
 import React, {useContext} from "react";
-import { View, Text, ScrollView, ActivityIndicator  } from "react-native";
-import { Card } from "react-native-paper";
-import styled from 'styled-components/native';
+import { View, Text, ActivityIndicator, TouchableOpacity  } from "react-native";
+import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, ProductScrollView, EmptyProductMessage} from "./product.style";
 
 import { ProductContext } from "../../../services/product/product.context";
 
-const Title = styled.Text`
-    color: ${props => props.theme.colors.ui.primary};
-    font-size: 16px;
-`;
 
-const ProductCard = styled(Card)`
-    background-color: ${props => props.theme.colors.ui.quaternary};
-    margin-bottom: ${props => props.theme.space[3]};
-    margin: ${props => props.theme.space[2]}; 
-    padding: ${props => props.theme.space[2]}; 
-`;
-
-const Info = styled.View`
-    padding: ${props => props.theme.space[3]};
-`;
-
-const RestaurantCardCover = styled(Card.Cover)`
-    padding: ${props => props.theme.space[3]};
-    background-color:  ${props => props.theme.colors.ui.quaternary};
-`;
-
-const Open = styled.View`
-    flex-direction: row;
-    align-items: center;
-`;
-
-const Row = styled.View`
-    flex-direction: row;
-    padding-top: ${props => props.theme.space[2]};
-    padding-bottom: ${props => props.theme.space[2]};
-`;
-
-const ProductScrollView = styled(ScrollView)`
-    flex: 1;
-    background-color: ${props => props.theme.colors.bg.primary};
-`;
-
-const EmptyProductMessage = styled(Text)`
-    margin: ${props => props.theme.space[3]};
-    text-align: center;
-`;
-
-
-export const ProductComponents = ({ categoryId }) => {
+export const ProductComponents = ({ categoryId, navigation }) => {
     const { products, isLoading, error } = useContext(ProductContext);
 
     if (isLoading) {
         return <ActivityIndicator size="large" color="#0000ff" />;
     }
-    
+
     if (products.length === 0) {
         return <EmptyProductMessage>No products available.</EmptyProductMessage>;
     }
 
+    const handleProductPress = (productId) => {
+        navigation.navigate("ProductDetails", { productId });
+    };
 
   return (
     <ProductScrollView>
             {products.map((product) => (
+                <TouchableOpacity key={product._id} onPress={() => handleProductPress(product._id)}>
                 <ProductCard elevation={5} key={product._id}>
                     <View>
                         <RestaurantCardCover source={{ uri: product.image }} />
@@ -76,6 +37,7 @@ export const ProductComponents = ({ categoryId }) => {
                         </Open>
                     </Info>
                 </ProductCard>
+                </TouchableOpacity>
             ))}
         </ProductScrollView>
   );
