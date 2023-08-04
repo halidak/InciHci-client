@@ -8,7 +8,7 @@ import { List } from "react-native-paper";
 
 
 export const ProductDetailsComponent = ({ productId }) => {
-  const { fetchProduct, isLoading, productDetails, getRating, rating,  compositions, getCompositions } = useContext(ProductDetailsContext); 
+  const { fetchProduct, isLoading, productDetails, getRating, rating, compositions, getCompositions } = useContext(ProductDetailsContext);
   const [compositionsExpanded, setCompositionsExpanded] = useState(false);
 
   useEffect(() => {
@@ -21,8 +21,6 @@ export const ProductDetailsComponent = ({ productId }) => {
   //console.log('Product Details:', productDetails);
   console.log('Compositions:', compositions);
 
- 
-
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
@@ -30,34 +28,39 @@ export const ProductDetailsComponent = ({ productId }) => {
   return (
     <SafeArea>
       {productDetails ? (
-         <ProductScrollView>
-             <ProductCard elevation={1} key={productDetails._id}>
-                 <View>
-                     <RestaurantCardCover source={{ uri: productDetails.image }} />
-                 </View>
-                 <Info>
-                     <Title>{productDetails.name}</Title>
-                     <Open>
-                         <Row>
-                             <Text>{productDetails.company}</Text>
-                         </Row>
-                     </Open>
-                     <RatingComponent rating={rating} />
-                     <Open>
-                         <Row>
-                             <Text>{productDetails.description}</Text>
-                         </Row>
-                     </Open>
-                 </Info>
-             </ProductCard>
-              <List.Accordion
-                title="Compositions"
-                left={(props) => <List.Icon {...props} icon="flower" />}>
-                {compositions.map((composition) => (
-                  <List.Item title={composition.name} />
-                ))}
-              </List.Accordion>
-     </ProductScrollView>
+        <ProductScrollView>
+          <ProductCard elevation={1} key={productDetails._id}>
+            <View>
+              <RestaurantCardCover source={{ uri: productDetails.image }} />
+            </View>
+            <Info>
+              <Title>{productDetails.name}</Title>
+              <Open>
+                <Row>
+                  <Text>{productDetails.company}</Text>
+                </Row>
+              </Open>
+              <RatingComponent rating={rating} />
+              <Open>
+                <Row>
+                  <Text>{productDetails.description}</Text>
+                </Row>
+              </Open>
+            </Info>
+          </ProductCard>
+          <List.Accordion
+            title="Compositions"
+            left={(props) => <List.Icon {...props} icon="flower" />}
+          >
+            {compositions.length === 0 ? (
+              <Text>No compositions available.</Text>
+            ) : (
+              compositions.map((composition) => (
+                <List.Item key={composition.id} title={composition.name} />
+              ))
+            )}
+          </List.Accordion>
+        </ProductScrollView>
       ) : (
         <Text>No product details available.</Text>
       )}

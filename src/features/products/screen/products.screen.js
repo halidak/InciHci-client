@@ -11,7 +11,6 @@ export const ProductsScreen = ({ navigation }) => {
 
   return (
     <SafeArea>
-        <Search/>
         <ProductContextProvider categoryId={categoryId}>
       <ProductComponents categoryId={categoryId} navigation={ navigation }/>
         </ProductContextProvider>

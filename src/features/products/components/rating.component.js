@@ -1,24 +1,28 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import { SvgXml } from "react-native-svg";
 import star from "../../../../assets/star";
 
 
 export const RatingComponent = ({ rating }) => {
-  // Konvertiramo rating u cijeli broj kako bismo znali koliko zvjezdica prikazati
   const numStars = Math.round(parseFloat(rating.averageRating));
+  console.log(numStars)
 
-  // Kreiramo niz s JSX elemetima koji predstavljaju zvjezdice
+  if(isNaN(parseFloat(rating.averageRating)))  {
+      return <Text>No one rated this product yet</Text>;
+    }
+    
   const stars = [];
   for (let i = 0; i < numStars; i++) {
     stars.push(
       <SvgXml
         key={i}
         xml={star}
-        width={20} // Prilagodite veličinu zvjezdica prema potrebi
+        width={20}
         height={20}
       />
     );
+
   }
 
   return <View style={{ flexDirection: "row" }}>{stars}</View>;
