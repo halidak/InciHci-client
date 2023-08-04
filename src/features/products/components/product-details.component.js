@@ -5,6 +5,7 @@ import { ProductDetailsContext } from "../../../services/product/product-details
 import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, ProductScrollView, EmptyProductMessage} from "./product.style";
 import { RatingComponent } from "./rating.component";
 import { List } from "react-native-paper";
+import { Favourite } from "./favourites.component";
 
 
 export const ProductDetailsComponent = ({ productId }) => {
@@ -31,6 +32,7 @@ export const ProductDetailsComponent = ({ productId }) => {
         <ProductScrollView>
           <ProductCard elevation={1} key={productDetails._id}>
             <View>
+              <Favourite />
               <RestaurantCardCover source={{ uri: productDetails.image }} />
             </View>
             <Info>

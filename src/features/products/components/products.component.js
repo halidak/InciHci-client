@@ -3,6 +3,7 @@ import { View, Text, ActivityIndicator, TouchableOpacity } from "react-native";
 import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, ProductScrollView, EmptyProductMessage } from "./product.style";
 import { ProductContext } from "../../../services/product/product.context";
 import { Search } from "./search.component";
+import { Favourite } from "./favourites.component";
 
 export const ProductComponents = ({ categoryId, navigation }) => {
   const { products, isLoading, error } = useContext(ProductContext);
@@ -21,6 +22,12 @@ export const ProductComponents = ({ categoryId, navigation }) => {
     return () => clearTimeout(delayFilter);
   }, [searchQuery, products]);
 
+  // Check if there's an error
+  if (error) {
+    return <Text>Error: {error.message}</Text>;
+  }
+
+  // Check if isLoading is true
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
@@ -41,6 +48,7 @@ export const ProductComponents = ({ categoryId, navigation }) => {
           <TouchableOpacity key={product._id} onPress={() => handleProductPress(product._id)}>
             <ProductCard elevation={5} key={product._id}>
               <View>
+                <Favourite />
                 <RestaurantCardCover source={{ uri: product.image }} />
               </View>
               <Info>
