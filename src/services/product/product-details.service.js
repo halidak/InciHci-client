@@ -36,3 +36,15 @@ export const getProductById = async (productId) => {
         throw err;
     }
   }
+
+  export const fetchComments = async (productId) => {
+    try {
+        const response = await axios.get(`${API_URL}/comments/getComments/${productId}`);
+        console.log("Comments", response.data);
+        return response.data;
+    }
+    catch (err) {
+        console.error('Error fetching comments:', err);
+        throw err;
+    }
+  }

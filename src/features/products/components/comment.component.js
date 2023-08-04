@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
 
 const CommentContainer = styled.View`
@@ -15,11 +16,11 @@ const Content = styled.Text`
   margin-top: 5px;
 `;
 
-export const CommentItem = ({ username, content }) => {
+export const CommentItem = ({ comment }) => {
     return (
       <CommentContainer>
-        <Username>{username}</Username>
-        <Content>{content}</Content>
+        <Username>{comment.user.firstName} {comment.user.lastName}</Username>
+        <Content>{comment.content}</Content>
       </CommentContainer>
     );
   };

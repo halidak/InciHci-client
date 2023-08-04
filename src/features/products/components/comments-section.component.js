@@ -1,71 +1,28 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, SectionList, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
-import styled from 'styled-components/native';
-import { CommentItem } from './comment.component';
+import React, { useRef } from "react";
+import { CommentItem } from "./comment.component";
+import { styled } from "styled-components/native";
+import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { Button, TouchableOpacity } from "react-native";
 
-export const CommentSection = () => {
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+const Container = styled.View`
+  padding: 20px;
+  background-color: #f0f0f0;
+`;
 
-  const handleAddComment = () => {
-    if (newComment.trim() === '') return;
-    const newCommentObj = {
-      username: 'JohnDoe',
-      content: newComment,
-      likes: 0,
-    };
-    setComments([...comments, newCommentObj]);
-    setNewComment('');
-  };
-
-  const renderCommentItem = ({ item }) => <CommentItem {...item} />;
-  const commentSections = [{ data: comments, renderItem: renderCommentItem, keyExtractor: (item, index) => index.toString() }];
-
-  return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <Container>
-        <SectionList
-          sections={commentSections}
-          renderItem={({ item }) => <CommentItem {...item} />}
-          keyExtractor={(item, index) => index.toString()}
-          renderSectionHeader={() => <></>}
-        />
-        <InputContainer>
-          <CommentInput
-            placeholder="Add a comment..."
-            value={newComment}
-            onChangeText={(text) => setNewComment(text)}
-          />
-          <PostButton onPress={handleAddComment}>
-            <PostButtonText>Post Comment</PostButtonText>
-          </PostButton>
-        </InputContainer>
-      </Container>
-    </KeyboardAvoidingView>
-  );
-};
-
-const Container = styled(View)`
-  flex: 1;
+const Title = styled.Text`
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
 `;
 
 const InputContainer = styled.View`
   flex-direction: row;
   align-items: center;
-  padding: 10px;
-  border-top-width: 1px;
-  border-top-color: #ccc;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #fff;
+  margin-bottom: 10px;
 `;
 
-const CommentInput = styled.TextInput`
+const Input = styled.TextInput`
   flex: 1;
   padding: 10px;
   border-radius: 8px;
@@ -85,3 +42,48 @@ const PostButtonText = styled.Text`
   color: white;
   font-weight: bold;
 `;
+
+const EmptyMessage = styled.Text`
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+  margin-top: 20px;
+`;
+
+export const CommentSection = ({ comments }) => {
+  const scrollViewRef = useRef();
+
+  const handlePostComment = () => {
+    // Add logic to post the comment
+    Keyboard.dismiss(); // Hide the keyboard after posting the comment
+  };
+
+  return (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <ScrollView
+        ref={scrollViewRef}
+        onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+      >
+        <Container>
+          <Title>Comments</Title>
+          <InputContainer>
+            <Input placeholder="Add a comment..." />
+            <PostButton onPress={handlePostComment}>
+              <PostButtonText>Post Comment</PostButtonText>
+            </PostButton>
+          </InputContainer>
+          {comments.length === 0 ? (
+            <EmptyMessage>No comments available.</EmptyMessage>
+          ) : (
+            comments.map((comment) => (
+              <CommentItem key={comment.id} comment={comment} />
+            ))
+          )}
+        </Container>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
+};
