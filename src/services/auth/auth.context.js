@@ -32,12 +32,20 @@ export const AuthContextProvider = ( {children} ) => {
       
             onAuth({ user: result, token });
           } else {
-            console.log("Invalid response from the server.");
+            throw new Error("Invalid response from the server.");
           }
         } catch (err) {
-          console.log(err);
+          if (err.response && err.response.status === 400 && err.response.data.message === "Invalid credentials") {
+            throw new Error("Invalid email or password.");
+          } else if (err.response && err.response.status === 404 && err.response.data.message === "User does not exist") {
+            throw new Error("User does not exist.");
+          } else {
+            throw new Error("An error occurred. Please try again later.");
+          }
         }
       };
+      
+    
       
 
     return (

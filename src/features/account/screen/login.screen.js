@@ -23,6 +23,21 @@ export const LoginScreen = ({ navigation }) => {
      const [password, setPassword] = useState("");
 
     const handleLoginPress = async () => {
+        if (!email || !password) {
+            setError("Please enter both email and password.");
+            return;
+        }
+
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters long.");
+            return;
+        }
+
+        if (!email.includes("@")) {
+            setError("Please enter a valid email address.");
+            return;
+        }
+
         try{
             setIsLoading(true);
             await handleLogin(email, password);
@@ -30,7 +45,11 @@ export const LoginScreen = ({ navigation }) => {
             console.log("Success")
             navigation.navigate("Category");
         } catch (err) {
-            setError("Invalid email or password");
+            if (err.response && err.response.status === 400 && err.response.data.message === "User not found") {
+                setError("Invalid email or password.");
+            } else {
+                setError("Invalid email or password.");
+            }
             setIsLoading(false);
         }
     }
