@@ -27,17 +27,15 @@ export const Favourite = ({ productId }) => {
   }, [favourites.likedProducts, productId]);
 
   const handlePress = async () => {
-    // Toggle isFavourite state immediately to provide user feedback
     setIsFavourite((prevState) => !prevState);
 
-    // Call saveFavourites and then reload favourites from backend
     await saveFavourites(user._id, productId);
     loadFavourites(user._id);
   };
 
   return (
     <FavouriteButton onPress={handlePress}>
-      {isLoading ? ( // Show ActivityIndicator if data is loading
+      {isLoading ? ( 
         <ActivityIndicator size="small" color="red" />
       ) : (
         <AntDesign
