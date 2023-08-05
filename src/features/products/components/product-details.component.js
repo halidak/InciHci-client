@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ScrollView, // Import ScrollView
+  ScrollView, 
 } from "react-native";
 import { SafeArea } from "../../../components/utility/safe-area.component";
 import { ProductDetailsContext } from "../../../services/product/product-details.context";
@@ -15,9 +15,12 @@ import { List } from "react-native-paper";
 import { Favourite } from "./favourites.component";
 import { CommentSection } from "./comments-section.component";
 
-export const ProductDetailsComponent = ({ productId }) => {
+import { AuthContext } from "../../../services/auth/auth.context";
+
+export const ProductDetailsComponent = ({ productId, navigation }) => {
   const { fetchProduct, isLoading, productDetails, getRating, rating, compositions, getCompositions, comments, getComments } = useContext(ProductDetailsContext);
   const [compositionsExpanded, setCompositionsExpanded] = useState(false);
+  const {isAuth} = useContext(AuthContext);
 
   useEffect(() => {
     fetchProduct(productId);
@@ -46,7 +49,9 @@ export const ProductDetailsComponent = ({ productId }) => {
             <>
               <ProductCard elevation={1} key={productDetails._id}>
                 <View>
-                  <Favourite />
+                {isAuth ? 
+                <Favourite /> : null
+                }
                   <RestaurantCardCover source={{ uri: productDetails.image }} />
                 </View>
                 <Info>
@@ -76,7 +81,7 @@ export const ProductDetailsComponent = ({ productId }) => {
                   ))
                 )}
               </List.Accordion>
-              <CommentSection comments={comments} />
+              <CommentSection comments={comments} navigation={navigation} />
             </>
           ) : (
             <Text>No product details available.</Text>

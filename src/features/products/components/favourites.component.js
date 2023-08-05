@@ -12,13 +12,13 @@ const FavouriteButton = styled(TouchableOpacity)`
 `;
 
 export const Favourite = () => {
-    const [isFavourite, setIsFavourite] = useState(true);
+    const [isFavourite, setIsFavourite] = useState(false);
   return (
     <FavouriteButton>
       <AntDesign name={
             isFavourite ? "heart" : "hearto"
       } size={24} color={
-            isFavourite ? "red" : "white"
+            isFavourite ? "red" : "red"
       } />
     </FavouriteButton>
   );

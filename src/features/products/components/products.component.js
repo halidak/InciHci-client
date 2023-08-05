@@ -4,11 +4,14 @@ import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, ProductScroll
 import { ProductContext } from "../../../services/product/product.context";
 import { Search } from "./search.component";
 import { Favourite } from "./favourites.component";
+import { AuthContext } from "../../../services/auth/auth.context";
 
 export const ProductComponents = ({ categoryId, navigation }) => {
   const { products, isLoading, error } = useContext(ProductContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(products);
+
+  const { isAuth } = useContext(AuthContext);
 
   useEffect(() => {
     const delayFilter = setTimeout(() => {
@@ -48,7 +51,9 @@ export const ProductComponents = ({ categoryId, navigation }) => {
           <TouchableOpacity key={product._id} onPress={() => handleProductPress(product._id)}>
             <ProductCard elevation={5} key={product._id}>
               <View>
-                <Favourite />
+                {isAuth ? 
+                <Favourite /> : null
+                }
                 <RestaurantCardCover source={{ uri: product.image }} />
               </View>
               <Info>

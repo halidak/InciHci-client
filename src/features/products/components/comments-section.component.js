@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import { CommentItem } from "./comment.component";
 import { styled } from "styled-components/native";
 import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { Button, TouchableOpacity } from "react-native";
+import { AuthContext } from "../../../services/auth/auth.context";
 
 const Container = styled.View`
   padding: 20px;
@@ -50,8 +51,9 @@ const EmptyMessage = styled.Text`
   margin-top: 20px;
 `;
 
-export const CommentSection = ({ comments }) => {
+export const CommentSection = ({ comments, navigation }) => {
   const scrollViewRef = useRef();
+  const { isAuth } = useContext(AuthContext);
 
   const handlePostComment = () => {
     // Add logic to post the comment
@@ -69,12 +71,17 @@ export const CommentSection = ({ comments }) => {
       >
         <Container>
           <Title>Comments</Title>
-          <InputContainer>
+          {isAuth ? (
+
+            <InputContainer>
             <Input placeholder="Add a comment..." />
             <PostButton onPress={handlePostComment}>
               <PostButtonText>Post Comment</PostButtonText>
             </PostButton>
           </InputContainer>
+          ) : (
+            <Button title="Login to post a comment" onPress={() => navigation.navigate("Account")} />
+          )}
           {comments.length === 0 ? (
             <EmptyMessage>No comments available.</EmptyMessage>
           ) : (

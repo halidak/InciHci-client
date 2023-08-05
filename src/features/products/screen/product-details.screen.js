@@ -9,7 +9,7 @@ export const ProductDetailsScreen = ({ route, navigation }) => {
     return (
         <ProductDetailsContextProvider productId={productId}>
         <SafeArea>
-           <ProductDetailsComponent productId={productId}/>
+           <ProductDetailsComponent productId={productId} navigation={navigation}/>
         </SafeArea>
         </ProductDetailsContextProvider>
     );
