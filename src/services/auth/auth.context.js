@@ -1,6 +1,6 @@
 import React, {useState, useContext, createContext} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { loginRequest } from "./auth.service";
+import { loginRequest, registerRequest, verifyEmail } from "./auth.service";
 
 export const AuthContext = createContext();
 
@@ -44,9 +44,42 @@ export const AuthContextProvider = ( {children} ) => {
           }
         }
       };
+
+      const handleRegister = async (email, password, firstName, lastName) => {
+        try {
+            const isRegistered = await registerRequest(email, password, firstName, lastName);
+
+            if (isRegistered) {
+              console.log("Registration successful. A confirmation message has been sent.");
+            } else {
+              throw new Error("User already exists.");
+            }
+        } catch (err) {
+          if (err.response && err.response.status === 400 && err.response.data.message === "User already exists") {
+            throw new Error("User already exists.");
+          } else {
+            throw new Error("An error occurred. Please try again later.");
+          }
+        }
+      }
+
+      const handleVerify = async (verificationCode) => {
+        try {
+          const response = await verifyEmail(verificationCode);
       
-    
-      
+          if (response) {
+            console.log("Verification successful.");
+          } else {
+            throw new Error("Invalid response from the server.");
+          }
+        } catch (err) {
+          if (err.response && err.response.status === 400 && err.response.data.message === "Invalid verification code") {
+            throw new Error("Invalid verification code.");
+          } else {
+            throw new Error("An error occurred. Please try again later.");
+          }
+        }
+      }
 
     return (
         <AuthContext.Provider 
@@ -56,7 +89,9 @@ export const AuthContextProvider = ( {children} ) => {
             onAuth, 
             onLogout,
             isAuth,
-            handleLogin
+            handleLogin,
+            handleRegister,
+            handleVerify
             }}>
             {children}
         </AuthContext.Provider>
