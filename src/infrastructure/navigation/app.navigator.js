@@ -10,6 +10,8 @@ import { CategoryScreen } from "../../features/products/screen/category.screen";
 
 import { ProductNavigator } from "./product.navigator";
 
+import { AccountNavigator } from "./account.navigator";
+
 const Tab = createBottomTabNavigator();
 
 const TAB_ICON = {
@@ -39,7 +41,7 @@ export const AppNavigator = () => {
             >
                 <Tab.Screen name="Category" component={ProductNavigator}  options={{ headerShown: false }} />
                 <Tab.Screen name="Camera" component={CameraScreen} />
-                <Tab.Screen name="Account" component={AccountScreen} />
+                <Tab.Screen name="Account" component={AccountNavigator} />
             </Tab.Navigator>
         </NavigationContainer>
     );
