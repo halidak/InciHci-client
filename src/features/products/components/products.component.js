@@ -52,7 +52,7 @@ export const ProductComponents = ({ categoryId, navigation }) => {
             <ProductCard elevation={5} key={product._id}>
               <View>
                 {isAuth ? 
-                <Favourite /> : null
+                <Favourite productId={product._id}/> : null
                 }
                 <RestaurantCardCover source={{ uri: product.image }} />
               </View>

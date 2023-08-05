@@ -50,7 +50,7 @@ export const ProductDetailsComponent = ({ productId, navigation }) => {
               <ProductCard elevation={1} key={productDetails._id}>
                 <View>
                 {isAuth ? 
-                <Favourite /> : null
+                <Favourite productId={productId}/> : null
                 }
                   <RestaurantCardCover source={{ uri: productDetails.image }} />
                 </View>

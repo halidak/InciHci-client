@@ -17,9 +17,12 @@ const Content = styled.Text`
 `;
 
 export const CommentItem = ({ comment }) => {
+  const username = comment.user
+    ? `${comment.user.firstName} ${comment.user.lastName}`
+    : "NA";
     return (
       <CommentContainer>
-        <Username>{comment.user.firstName} {comment.user.lastName}</Username>
+        <Username>{username}</Username>
         <Content>{comment.content}</Content>
       </CommentContainer>
     );
