@@ -18,9 +18,10 @@ import { CommentSection } from "./comments-section.component";
 import { AuthContext } from "../../../services/auth/auth.context";
 
 export const ProductDetailsComponent = ({ productId, navigation }) => {
-  const { fetchProduct, isLoading, productDetails, getRating, rating, compositions, getCompositions, comments, getComments } = useContext(ProductDetailsContext);
+  const { fetchProduct, isLoading, productDetails, getRating, rating, compositions, getCompositions, comments, getComments, addComment, setComments } = useContext(ProductDetailsContext);
   const [compositionsExpanded, setCompositionsExpanded] = useState(false);
   const {isAuth} = useContext(AuthContext);
+  console.log(productId)
 
   useEffect(() => {
     fetchProduct(productId);
@@ -28,6 +29,7 @@ export const ProductDetailsComponent = ({ productId, navigation }) => {
     getCompositions(productId);
     getComments(productId);
   }, [productId]);
+
 
   console.log("Rating:", rating);
   //console.log('Product Details:', productDetails);
@@ -81,7 +83,7 @@ export const ProductDetailsComponent = ({ productId, navigation }) => {
                   ))
                 )}
               </List.Accordion>
-              <CommentSection comments={comments} navigation={navigation} />
+              <CommentSection comments={comments} navigation={navigation} addComment={addComment} productId={productId} setComments={setComments} getComments={getComments}/>
             </>
           ) : (
             <Text>No product details available.</Text>

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { getProductById, AverageRating, fetchCompositions, fetchComments } from "./product-details.service";
+import { getProductById, AverageRating, fetchCompositions, fetchComments, sendComment } from "./product-details.service";
 
 export const ProductDetailsContext = createContext();
 
@@ -72,6 +72,20 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
     }
   }
 
+  const addComment = async (userId, productId, content) => {
+    try {
+      setIsLoading(true);
+      const response = await sendComment(userId, productId, content);
+      setIsLoading(false);
+      return response;
+    } catch (err) {
+      console.error("Error adding comment:", err);
+      setError(err);
+      setIsLoading(false);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     // Pozivamo funkciju getRating unutar useEffect s pravim productId
     getRating(productId);
@@ -91,7 +105,9 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
         compositions,
         getCompositions,
         comments,
-        getComments
+        getComments,
+        addComment,
+        setComments
       }}
     >
       {children}

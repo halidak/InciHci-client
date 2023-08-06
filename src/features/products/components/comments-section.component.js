@@ -1,7 +1,7 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useState, useEffect } from "react";
 import { CommentItem } from "./comment.component";
 import { styled } from "styled-components/native";
-import { View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from "react-native";
 import { Button, TouchableOpacity } from "react-native";
 import { AuthContext } from "../../../services/auth/auth.context";
 
@@ -51,13 +51,22 @@ const EmptyMessage = styled.Text`
   margin-top: 20px;
 `;
 
-export const CommentSection = ({ comments, navigation }) => {
+export const CommentSection = ({ comments, navigation, addComment, productId, setComments, getComments }) => {
   const scrollViewRef = useRef();
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth, user } = useContext(AuthContext);
+  const [comment, setComment] = useState("");
 
-  const handlePostComment = () => {
-    // Add logic to post the comment
-    Keyboard.dismiss(); // Hide the keyboard after posting the comment
+  const handlePostComment = async () => {
+    console.log(user._id);
+    console.log(productId);
+    console.log(comment);
+
+    const addedComment = await addComment(user._id, productId, comment);
+    console.log("moze");
+    console.log("KOMENTAR:",addedComment);
+    getComments(productId)
+    setComments([...comments, addedComment]); 
+    Keyboard.dismiss();
   };
 
   return (
@@ -74,7 +83,10 @@ export const CommentSection = ({ comments, navigation }) => {
           {isAuth ? (
 
             <InputContainer>
-            <Input placeholder="Add a comment..." />
+            <Input placeholder="Add a comment..." 
+              value={comment}
+              onChangeText={(c) => setComment(c)}
+            />
             <PostButton onPress={handlePostComment}>
               <PostButtonText>Post Comment</PostButtonText>
             </PostButton>

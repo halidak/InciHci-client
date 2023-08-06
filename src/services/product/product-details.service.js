@@ -48,3 +48,19 @@ export const getProductById = async (productId) => {
         throw err;
     }
   }
+
+  //add comment
+ export const sendComment = async (userId, productId, content) => {
+    try {
+      const response = await axios.post(`${API_URL}/comments/addComment`, {
+        content,
+        product: productId,
+        user: userId,
+      });
+      console.log("Comment added", response.data);
+      return response.data;
+    } catch (err) {
+      console.error("Error adding comment:", err);
+      throw err;
+    }
+  };
