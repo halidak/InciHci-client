@@ -10,6 +10,7 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
   const [rating, setRating] = useState(0);
   const [compositions, setCompositions] = useState([]);
   const [comments, setComments] = useState([]);
+  const [rateArray, setRateArray] = useState([]);
 
 
   const fetchProduct = async (productId) => {
@@ -88,12 +89,15 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
 
 
 
+
+
   useEffect(() => {
     // Pozivamo funkciju getRating unutar useEffect s pravim productId
     getRating(productId);
     getCompositions(productId);
     getComments(productId);
   }, [productId]);
+  
 
   return (
     <ProductDetailsContext.Provider

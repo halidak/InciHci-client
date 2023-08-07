@@ -6,36 +6,50 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView, 
-  Button
 } from "react-native";
 import { SafeArea } from "../../../components/utility/safe-area.component";
 import { ProductDetailsContext } from "../../../services/product/product-details.context";
 import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, EmptyProductMessage, SectionEnd } from "./product.style";
 import { RatingComponent } from "./rating.component";
-import { List } from "react-native-paper";
+import { List, Button } from "react-native-paper";
 import { Favourite } from "./favourites.component";
 import { CommentSection } from "./comments-section.component";
 
 import { AuthContext } from "../../../services/auth/auth.context";
+import { useFocusEffect } from '@react-navigation/native';
 
-export const ProductDetailsComponent = ({ productId, navigation }) => {
+
+export const ProductDetailsComponent = ({ productId, navigation, route }) => {
   const { fetchProduct, isLoading, productDetails, getRating, rating, compositions, getCompositions, comments, getComments, addComment, setComments } = useContext(ProductDetailsContext);
   const [compositionsExpanded, setCompositionsExpanded] = useState(false);
   const {isAuth, logged} = useContext(AuthContext);
+  const [latestRating, setLatestRating] = useState(rating);
+  
   console.log(productId)
 
-  useEffect(() => {
-    fetchProduct(productId);
-    getRating(productId);
-    getCompositions(productId);
-    getComments(productId);
-  }, [productId]);
+  // useEffect(() => {
+  //   fetchProduct(productId);
+  //   getCompositions(productId);
+  //   getComments(productId);
+  //   getRating(productId);
+  // }, [productId]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+        fetchProduct(productId);
+        getCompositions(productId);
+        getComments(productId);
+        getRating(productId);
 
 
-  console.log("Rating:", rating);
+    }, [productId])
+);
+
+
+  //console.log("Rating:", rating);
   //console.log('Product Details:', productDetails);
-  console.log('Compositions:', compositions);
-  console.log('Comments:', comments);
+  //console.log('Compositions:', compositions);
+  //console.log('Comments:', comments);
 
 
   if (isLoading) {
@@ -53,9 +67,20 @@ export const ProductDetailsComponent = ({ productId, navigation }) => {
             <>
               <ProductCard elevation={1} key={productDetails._id}>
                 <View>
-                {isAuth ? 
-                <Favourite productId={productId}/> : null
-                }
+                {isAuth ? (
+                  <>
+                    <Favourite productId={productId} />
+                    <Button
+                      onPress={() => {
+                        navigation.navigate("RateProduct", {
+                          productId: productId,
+                        });
+                      }}
+                    >
+                      Rate the product
+                      </Button>
+                  </>
+                ) : null}
                   <RestaurantCardCover source={{ uri: productDetails.image }} />
                 </View>
                 <Info>

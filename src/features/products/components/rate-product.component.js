@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Text, TouchableOpacity, StyleSheet, View, Image, Button } from "react-native";
 import { RateProductContext } from "../../../services/rate/rate.context";
 import { AuthContext } from "../../../services/auth/auth.context";
+import { ProductDetailsContext } from "../../../services/product/product-details.context";
 
 export const RateProductComponent = ({productId, navigation }) => {
     const {rateProduct} = useContext(RateProductContext);
@@ -16,12 +17,9 @@ export const RateProductComponent = ({productId, navigation }) => {
     const starImgCorner = 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/star_corner.png';
 
     const rate = async() => {
-        console.log("RATE")
         await rateProduct(user._id, productId, defaultRating);
 
-        navigation.navigate("ProductDetails", {
-            productId: productId,
-        });
+        navigation.goBack();
 
     }
 
