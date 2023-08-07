@@ -6,6 +6,8 @@ import { CategoryScreen } from "../../features/products/screen/category.screen";
 import { ProductsScreen } from "../../features/products/screen/products.screen";
 import { ProductDetailsScreen } from "../../features/products/screen/product-details.screen";
 
+import { RateProductScreen } from "../../features/products/screen/rate-product.screen";
+
 const Stack = createStackNavigator();
 
 export const ProductNavigator = () => (
@@ -14,5 +16,6 @@ export const ProductNavigator = () => (
         component={CategoryScreen}/>
         <Stack.Screen name="Products" component={ProductsScreen} />
         <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
+        <Stack.Screen name="RateProduct" component={RateProductScreen} />
     </Stack.Navigator>
 );

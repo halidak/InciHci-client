@@ -6,10 +6,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView, 
+  Button
 } from "react-native";
 import { SafeArea } from "../../../components/utility/safe-area.component";
 import { ProductDetailsContext } from "../../../services/product/product-details.context";
-import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, EmptyProductMessage } from "./product.style";
+import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, EmptyProductMessage, SectionEnd } from "./product.style";
 import { RatingComponent } from "./rating.component";
 import { List } from "react-native-paper";
 import { Favourite } from "./favourites.component";
@@ -20,7 +21,7 @@ import { AuthContext } from "../../../services/auth/auth.context";
 export const ProductDetailsComponent = ({ productId, navigation }) => {
   const { fetchProduct, isLoading, productDetails, getRating, rating, compositions, getCompositions, comments, getComments, addComment, setComments } = useContext(ProductDetailsContext);
   const [compositionsExpanded, setCompositionsExpanded] = useState(false);
-  const {isAuth} = useContext(AuthContext);
+  const {isAuth, logged} = useContext(AuthContext);
   console.log(productId)
 
   useEffect(() => {
@@ -35,6 +36,7 @@ export const ProductDetailsComponent = ({ productId, navigation }) => {
   //console.log('Product Details:', productDetails);
   console.log('Compositions:', compositions);
   console.log('Comments:', comments);
+
 
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -64,6 +66,16 @@ export const ProductDetailsComponent = ({ productId, navigation }) => {
                     </Row>
                   </Open>
                   <RatingComponent rating={rating} />
+                  <SectionEnd>
+                    {isAuth ?  <Button
+                      title="Rate the product"
+                      onPress={() => {
+                        navigation.navigate("RateProduct", {
+                          productId: productId,
+                        });
+                      }}
+                    /> : null}
+                  </SectionEnd>
                   <Open>
                     <Row>
                       <Text>{productDetails.description}</Text>

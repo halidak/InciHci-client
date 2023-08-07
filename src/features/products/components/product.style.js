@@ -43,3 +43,9 @@ export const EmptyProductMessage = styled(Text)`
     margin: ${props => props.theme.space[3]};
     text-align: center;
 `;
+
+export const SectionEnd = styled.View`
+    flex: 1;
+    flex-direction: row;
+    justify-content: flex-end;
+`

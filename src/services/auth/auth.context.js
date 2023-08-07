@@ -8,12 +8,14 @@ export const AuthContextProvider = ( {children} ) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const isAuth = !!user;
+    const [logged, setIsLogged] = useState(false);
 
     const onAuth = async ({ user, token}) => {
         await AsyncStorage.setItem("user", JSON.stringify(user));
         await AsyncStorage.setItem("token", token);
         setUser(user);
         setToken(token);
+        setIsLogged(true);
     }
 
     const onLogout = async () => {
@@ -21,6 +23,7 @@ export const AuthContextProvider = ( {children} ) => {
         await AsyncStorage.removeItem("token");
         setUser(null);
         setToken(null);
+        setIsLogged(false);
     }
 
     const handleLogin = async (email, password) => {
@@ -91,7 +94,8 @@ export const AuthContextProvider = ( {children} ) => {
             isAuth,
             handleLogin,
             handleRegister,
-            handleVerify
+            handleVerify,
+            logged
             }}>
             {children}
         </AuthContext.Provider>
