@@ -64,3 +64,4 @@ export const getProductById = async (productId) => {
       throw err;
     }
   };
+

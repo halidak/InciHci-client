@@ -86,6 +86,8 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
     }
   };
 
+
+
   useEffect(() => {
     // Pozivamo funkciju getRating unutar useEffect s pravim productId
     getRating(productId);
@@ -107,7 +109,7 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
         comments,
         getComments,
         addComment,
-        setComments
+        setComments,
       }}
     >
       {children}

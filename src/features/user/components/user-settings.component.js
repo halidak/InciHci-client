@@ -16,11 +16,6 @@ const AvatarContainer = styled.View`
 export const UserSettings = ({navigation}) => {
   const { isAuth, onLogout, user } = useContext(AuthContext);
 
-  console.log(navigation)
-
-  const navigate = () => {
-    navigation.navigate("UserFavourites")
-  }
 
   return (
     <ScrollView>
@@ -30,12 +25,12 @@ export const UserSettings = ({navigation}) => {
       <AvatarContainer>
         {user.image ? (
             <Avatar.Image
-            size={180}
+            size={150}
                 source={{ uri: user.image }}
                 backgroundColor="#2182BD"
                 />
                 ): (
-                    <Avatar.Icon size={180} icon="human" backgroundColor="#2182BD" />
+                  <Avatar.Text size={150} label={user.firstName[0]} />
                     )}
         <Spacer position="top" size="large">
           <Text variant="label">{user.firstName} {user.lastName}</Text>
@@ -63,6 +58,7 @@ export const UserSettings = ({navigation}) => {
          <SettingsItem
           title="Your product"
           left={() => <List.Icon icon="account" />}
+          onPress={() => navigation.navigate("UserPosted")}
           />
         <SettingsItem
           title="Logout"

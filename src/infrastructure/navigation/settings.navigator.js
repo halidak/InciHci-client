@@ -6,6 +6,8 @@ import { UserScreen } from "../../features/user/screen/user.screen";
 
 import { UserFavouritesScreen } from "../../features/user/screen/user-favourites.screen";
 
+import { UserPostedScreen } from "../../features/user/screen/user-posted.screen";
+
 const SettingsStack = createStackNavigator();
 
 export const SettingsNavigator = () => {
@@ -13,6 +15,7 @@ export const SettingsNavigator = () => {
         <SettingsStack.Navigator headerMode="none">
             <SettingsStack.Screen name="Settings" component={UserScreen} />
             <SettingsStack.Screen name="UserFavourites" component={UserFavouritesScreen} />
+            <SettingsStack.Screen name="UserPosted" component={UserPostedScreen} />
         </SettingsStack.Navigator>
     );
 }

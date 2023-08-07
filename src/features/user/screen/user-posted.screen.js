@@ -6,33 +6,32 @@ import { ProductComponents } from "../../products/components/products.component"
 import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, ProductScrollView, EmptyProductMessage } from "../../products/components/product.style";
 import { Favourite } from "../../products/components/favourites.component";
 
-export const UserFavouritesScreen = ({ navigation }) => {
-    const { loadFavourites, favourites } = useContext(FavouritesContext);
+export const UserPostedScreen = ({ navigation }) => {
+    const { userProducts, getUserPosted } = useContext(FavouritesContext);
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
-        loadFavourites(user._id);
+        getUserPosted(user._id);
     }, []);
 
-    console.log("Favourites:", favourites);
+    console.log(userProducts);
 
     const handleProductPress = (productId) => {
         navigation.navigate("ProductDetails", { productId });
     };
 
-    if(favourites.likedProducts.length === 0){
+    if (userProducts.length === 0) {
         return (
-            <EmptyProductMessage>No favourites available.</EmptyProductMessage>
+            <EmptyProductMessage>No products available.</EmptyProductMessage>
         )
     }
 
     return (
         <ProductScrollView>
-            {favourites.likedProducts.map((product) => (
+            {userProducts.map((product) => (
                 <TouchableOpacity key={product._id} onPress={() => handleProductPress(product._id)}>
                     <ProductCard elevation={5}>
                         <View>
-                            <Favourite productId={product._id} />
                             <RestaurantCardCover source={{ uri: product.image }} />
                         </View>
                         <Info>
@@ -47,5 +46,5 @@ export const UserFavouritesScreen = ({ navigation }) => {
                 </TouchableOpacity>
             ))}
         </ProductScrollView>
-    );
+    )
 }

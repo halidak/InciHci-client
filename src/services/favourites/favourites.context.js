@@ -1,6 +1,6 @@
 import React, { useState, createContext, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { addFavourite, getFavourites } from "./favourites.service";
+import { addFavourite, getFavourites, UserProducts } from "./favourites.service";
 
 export const FavouritesContext = createContext();
 
@@ -10,6 +10,8 @@ export const FavouritesContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isFavourite, setIsFavourite] = useState(false);
+  const [userProducts, setUserProducts] = useState([]);
+
 
   const loadUser = async () => {
     try {
@@ -43,6 +45,21 @@ export const FavouritesContextProvider = ({ children }) => {
     }
   };
 
+  const getUserPosted = async (userId) => {
+    try {
+      setIsLoading(true);
+      const response = await UserProducts(userId);
+      setIsLoading(false);
+      setUserProducts(response);
+      return response;
+    } catch (err) {
+      console.error("Error fetching user posted products:", err);
+      setError(err);
+      setIsLoading(false);
+      throw err;
+    }
+  }
+
   useEffect(() => {
     loadUser();
   }, []);
@@ -61,7 +78,9 @@ export const FavouritesContextProvider = ({ children }) => {
         error,
         saveFavourites,
         loadFavourites,
-        user
+        user,
+        userProducts, 
+        getUserPosted
       }}
     >
       {children}
