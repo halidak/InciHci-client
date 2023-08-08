@@ -6,24 +6,58 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView, 
+  StyleSheet,
+  Alert
 } from "react-native";
 import { SafeArea } from "../../../components/utility/safe-area.component";
 import { ProductDetailsContext } from "../../../services/product/product-details.context";
 import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, EmptyProductMessage, SectionEnd } from "./product.style";
 import { RatingComponent } from "./rating.component";
-import { List, Button } from "react-native-paper";
+import { List, Button, Menu, Divider, PaperProvider, Provider, IconButton } from "react-native-paper";
 import { Favourite } from "./favourites.component";
 import { CommentSection } from "./comments-section.component";
 
 import { AuthContext } from "../../../services/auth/auth.context";
 import { useFocusEffect } from '@react-navigation/native';
+import { ProductContext } from "../../../services/product/product.context";
 
 
 export const ProductDetailsComponent = ({ productId, navigation, route }) => {
   const { fetchProduct, isLoading, productDetails, getRating, rating, compositions, getCompositions, comments, getComments, addComment, setComments } = useContext(ProductDetailsContext);
   const [compositionsExpanded, setCompositionsExpanded] = useState(false);
-  const {isAuth, logged} = useContext(AuthContext);
-  const [latestRating, setLatestRating] = useState(rating);
+  const {isAuth, logged, user} = useContext(AuthContext);
+  const [visible, setVisible] = useState(false);
+  const {deleteProduct} = useContext(ProductContext);
+
+  const openMenu = () => setVisible(true);
+
+  const closeMenu = () => setVisible(false);
+
+  const deleteAlert = () =>
+  Alert.alert(
+    "Delete comment",
+    "Are you sure you want to delete this comment?",
+    [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+      },
+      {
+        text: "Delete", onPress: () => handleDelete()
+      }
+    ],
+    { cancelable: false }
+  );
+
+  const handleDelete = async() => {
+    await deleteProduct(productId);
+    navigation.navigate("Category")
+  }
+
+
+
+
   
   console.log(productId)
 
@@ -58,6 +92,8 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
 
   return (
     <SafeArea>
+       <Provider>
+       <View style={styles.container}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -66,7 +102,23 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
           {productDetails ? (
             <>
               <ProductCard elevation={1} key={productDetails._id}>
-                <View>
+              <View style={styles.container}>
+          {user?._id === productDetails.user?._id ? ( <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={
+             <IconButton
+                icon="dots-vertical"
+                onPress={openMenu}
+                style={styles.iconButton}
+              />
+            }
+          >
+            <Menu.Item onPress={() => {}} title="Update product" />
+            <Menu.Item onPress={deleteAlert} title="Delete product" />
+            <Divider />
+            <Menu.Item onPress={() => {}} title="Add compositions" />
+          </Menu> ) : null}
                 {isAuth ? (
                   <>
                     <Favourite productId={productId} />
@@ -79,6 +131,7 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
                     >
                       Rate the product
                       </Button>
+                      
                   </>
                 ) : null}
                   <RestaurantCardCover source={{ uri: productDetails.image }} />
@@ -91,16 +144,6 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
                     </Row>
                   </Open>
                   <RatingComponent rating={rating} />
-                  <SectionEnd>
-                    {isAuth ?  <Button
-                      title="Rate the product"
-                      onPress={() => {
-                        navigation.navigate("RateProduct", {
-                          productId: productId,
-                        });
-                      }}
-                    /> : null}
-                  </SectionEnd>
                   <Open>
                     <Row>
                       <Text>{productDetails.description}</Text>
@@ -127,6 +170,17 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
           )}
         </ScrollView>
       </KeyboardAvoidingView>
+      </View>
+      </Provider>
     </SafeArea>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  menuButton: {
+    alignSelf: "center",
+    marginTop: 16,
+  },
+});

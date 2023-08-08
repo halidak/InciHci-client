@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { getProductById, AverageRating, fetchCompositions, fetchComments, sendComment } from "./product-details.service";
+import { getProductById, AverageRating, fetchCompositions, fetchComments, sendComment, deleteComment } from "./product-details.service";
 
 export const ProductDetailsContext = createContext();
 
@@ -87,8 +87,22 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
     }
   };
 
+  const removeComment = async (commentId) => {
+    try {
+      setIsLoading(true);
+      const response = await deleteComment(commentId);
+      setComments(prevComments => prevComments.filter(comment => comment._id !== commentId));
+      setIsLoading(false);
+      return response;
+    } catch (err) {
+      console.error("Error removing comment:", err);
+      setError(err);
+      setIsLoading(false);
+      throw err;
+    }
+  }
 
-
+ 
 
 
   useEffect(() => {
@@ -114,6 +128,7 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
         getComments,
         addComment,
         setComments,
+        removeComment,
       }}
     >
       {children}

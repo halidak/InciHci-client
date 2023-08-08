@@ -12,4 +12,14 @@ export const getProducts = async (categoryId) => {
   }
 };
 
-
+export const deleteP = async (productId) => {
+  try {
+      const response = await axios.delete(`${API_URL}/products/delete/${productId}`);
+      console.log("Product deleted", response.data);
+      return response.data;
+  }
+  catch (err) {
+      console.error('Error deleting product:', err);
+      throw err;
+  }
+}

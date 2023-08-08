@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { getProducts } from "./product.service";
+import { getProducts, deleteP } from "./product.service";
 
 export const ProductContext = createContext();
 
@@ -42,6 +42,24 @@ export const ProductContextProvider = ({ children, categoryId, productId }) => {
       throw err;
     }
   };
+
+  const deleteProduct = async (productId) => {
+    try {
+      setIsLoading(true);
+      const response = await deleteP(productId);
+      setIsLoading(false);
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product._id !== productId)
+      );
+      return response;
+    } catch (err) {
+      console.error("Error removing product:", err);
+      setError(err);
+      setIsLoading(false);
+      throw err;
+    }
+  };
+  
   
 
 
@@ -54,6 +72,7 @@ export const ProductContextProvider = ({ children, categoryId, productId }) => {
         onRefresh,
         fetchProduct,
         productDetails,
+        deleteProduct
       }}
     >
       {children}

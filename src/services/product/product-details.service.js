@@ -66,4 +66,16 @@ export const getProductById = async (productId) => {
   };
 
 
+export const deleteComment = async (commentId) => {
+    try {
+        const response = await axios.delete(`${API_URL}/comments/removeComment/${commentId}`);
+        console.log("Comment deleted", response.data);
+        return response.data;
+    }
+    catch (err) {
+        console.error('Error deleting comment:', err);
+        throw err;
+    }
+}
+
 
