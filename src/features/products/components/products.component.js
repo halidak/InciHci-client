@@ -6,10 +6,11 @@ import { Search } from "./search.component";
 import { Favourite } from "./favourites.component";
 import { AuthContext } from "../../../services/auth/auth.context";
 import { useFocusEffect } from '@react-navigation/native';
+import { TypeProductContext } from "../../../services/product/type-product.context";
 
 
 export const ProductComponents = ({ categoryId, navigation }) => {
-  const { products, isLoading, error, onRefresh } = useContext(ProductContext);
+  const { products, isLoading, error, onRefresh } = useContext(TypeProductContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(products);
 

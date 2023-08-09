@@ -4,6 +4,7 @@ import { ProductComponents } from "../components/products.component";
 import { useRoute } from "@react-navigation/native";
 import { Search } from "../components/search.component";
 import { ProductContextProvider } from "../../../services/product/product.context";
+import { TypeProductContextProvider } from "../../../services/product/type-product.context";
 
 export const ProductsScreen = ({ navigation }) => {
   const route = useRoute();
@@ -11,9 +12,9 @@ export const ProductsScreen = ({ navigation }) => {
 
   return (
     <SafeArea>
-        <ProductContextProvider categoryId={categoryId}>
+        <TypeProductContextProvider categoryId={categoryId}>
       <ProductComponents categoryId={categoryId} navigation={ navigation }/>
-        </ProductContextProvider>
+        </TypeProductContextProvider>
     </SafeArea>
   );
 };

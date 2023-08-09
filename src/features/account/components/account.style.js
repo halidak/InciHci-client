@@ -37,6 +37,11 @@ export const AuthInput = styled(TextInput)`
   width: 300px;
 `;
 
+export const DescInput = styled(TextInput)`
+  width: 300px;
+  height: 100px;
+`;
+
 export const Title = styled(Text)`
   font-size: 30px;
 `;

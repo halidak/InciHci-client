@@ -1,30 +1,30 @@
 import React, { createContext, useState, useEffect } from "react";
-import { getProducts, deleteP } from "./product.service";
+import { deleteP, addProduct } from "./product.service";
 
 export const ProductContext = createContext();
 
-export const ProductContextProvider = ({ children, categoryId, productId }) => {
+export const ProductContextProvider = ({ children, productId }) => {
   const [productDetails, setProductDetails] = useState(null);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const onRefresh = () => {
-    setIsLoading(true);
-    getProducts(categoryId)
-      .then((data) => {
-        setProducts(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-        setIsLoading(false);
-      });
-  };
+  // const onRefresh = () => {
+  //   setIsLoading(true);
+  //   getProducts(categoryId)
+  //     .then((data) => {
+  //       setProducts(data);
+  //       setIsLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       setError(error);
+  //       setIsLoading(false);
+  //     });
+  // };
 
-  useEffect(() => {
-    onRefresh();
-  }, [categoryId]);
+  // useEffect(() => {
+  //   onRefresh();
+  // }, [categoryId]);
 
   
   const fetchProduct = async (productId) => {
@@ -59,9 +59,21 @@ export const ProductContextProvider = ({ children, categoryId, productId }) => {
       throw err;
     }
   };
-  
-  
 
+  const createProduct = async (userId, categoryId, name, description, image, company, barCode) => {
+    try {
+      setIsLoading(true);
+      const response = await addProduct(userId, categoryId, name, description, image, company, barCode);
+      setIsLoading(false);
+      setProducts((prevProducts) => [...prevProducts, response]);
+      return response;
+    } catch (err) {
+      console.error("Error adding product:", err);
+      setError(err);
+      setIsLoading(false);
+      throw err;
+    }
+  };
 
   return (
     <ProductContext.Provider
@@ -69,10 +81,10 @@ export const ProductContextProvider = ({ children, categoryId, productId }) => {
         products,
         isLoading,
         error,
-        onRefresh,
         fetchProduct,
         productDetails,
-        deleteProduct
+        deleteProduct,
+        createProduct
       }}
     >
       {children}

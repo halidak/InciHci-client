@@ -23,3 +23,23 @@ export const deleteP = async (productId) => {
       throw err;
   }
 }
+
+export const addProduct = async (userId, categoryId, name, description, image, company, barCode) => {
+  try {
+    const response = await axios.post(`${API_URL}/products/create`, {
+      user: userId,
+      type: categoryId,
+      name,
+      description,
+      image,
+      company,
+      barCode
+    });
+    console.log("Product added", response.data);
+    return response.data;
+  } catch (err) {
+    console.error('Error adding product:', err);
+    throw err;
+  }
+}
+
