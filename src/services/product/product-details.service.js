@@ -78,4 +78,19 @@ export const deleteComment = async (commentId) => {
     }
 }
 
+export const addCompositions = async (name, productId) => {
+  try{
+    const response = await axios.post(`${API_URL}/compositions/addComposition`, {
+      name,
+      product: productId,
+    });
+    console.log("Composition added", response.data);
+    return response.data;
+  }    
+  catch (err) {
+        console.error('Error adding composition:', err);
+        throw err;
+    }
+}
+
 

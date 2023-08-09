@@ -20,6 +20,7 @@ import {
  import { launchCamera } from "react-native-image-picker";
  import { ProductContext } from "../../../services/product/product.context";
  import { AuthContext } from "../../../services/auth/auth.context";
+ import { useFocusEffect } from "@react-navigation/native";
 
 export const AddProductForm = ({navigation, route}) => {
     const [checked, setChecked] = useState('first');
@@ -33,18 +34,54 @@ export const AddProductForm = ({navigation, route}) => {
     const {user} = useContext(AuthContext);
     const [image, setImage] = useState("");
     const [error, setError] = useState("");
+    const [imageIsLoading, setImageIsLoading] = useState(false);
 
 
-    // if(capturedImageUri){
-    //     setImage(capturedImageUri);
-    // }
     useEffect(() => {
-        // Initialize image state with capturedImageUri if available
-        const capturedImageUri = route.params?.capturedImageUri;
+        //const capturedImageUri = route.params?.capturedImageUri;
+        console.log("ADD PRODUCT SLIKA", capturedImageUri);
+      
         if (capturedImageUri) {
-          setImage(capturedImageUri);
+          const source = {
+            uri: capturedImageUri,
+            type: "image/jpg",
+            name: "image.jpg"
+          };
+          console.log("SLIKA IZ kamere", source);
+          handleUpdata(source);
+        //setImage(capturedImageUri)
         }
-      }, []);
+      }, [capturedImageUri]);
+
+      const handleUpdata = (photo) => {
+        // Postavite isLoading na true dok se slika učitava
+        setImageIsLoading(true);
+    
+        const data = new FormData();
+        data.append("file", photo);
+        data.append("upload_preset", "InciHci_");
+        data.append("cloud_name", "dl7wdm0uj");
+        fetch("https://api.cloudinary.com/v1_1/dl7wdm0uj/image/upload", {
+            method: "post",
+            body: data,
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log("SLIKA ZA SLANJE",data);
+            setImage(data.url);
+            // Postavite isLoading nazad na false kad se slika učita
+            setImageIsLoading(false);
+        })
+        .catch((err) => {
+            Alert.alert("An Error Occurred While Uploading");
+            console.log("UPLOAD ERROR",err);
+            // Postavite isLoading nazad na false ako dođe do greške
+            setImageIsLoading(false);
+        });
+    }
+    
+
+
 
     //console.log("Captured image URI:", capturedImageUri);
 
@@ -67,30 +104,6 @@ export const AddProductForm = ({navigation, route}) => {
         );
         };
 
-        // //open camera function
-        // const openCamera = async () => {
-        //     try {
-        //         const granted = await PermissionsAndroid.request(
-        //             PermissionsAndroid.PERMISSIONS.CAMERA,
-        //             {
-        //                 title: "Cool Photo App Camera Permission",
-        //                 message:
-        //                     "Cool Photo App needs access to your camera " +
-        //                     "so you can take awesome pictures.",
-        //                 buttonNeutral: "Ask Me Later",
-        //                 buttonNegative: "Cancel",
-        //                 buttonPositive: "OK"
-        //             }
-        //         );
-        //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        //             console.log("You can use the camera");
-        //         } else {
-        //             console.log("Camera permission denied");
-        //         }
-        //     } catch (err) {
-        //         console.warn(err);
-        //     }
-        // };
         const openCamera = async () => {
             const { status } = await Permissions.askAsync(Permissions.CAMERA);
             if (status === "granted") {
@@ -100,62 +113,62 @@ export const AddProductForm = ({navigation, route}) => {
             }
           };
 
-        // //open gallery function
-        // const openGallery = async () => {
-        //     try {
-        //         const granted = await PermissionsAndroid.request(
-        //             PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        //             {
-        //                 title: "Cool Photo App Read Storage Permission",
-        //                 message:
-        //                     "Cool Photo App needs access to your storage " +
-        //                     "so you can take awesome pictures.",
-        //                 buttonNeutral: "Ask Me Later",
-        //                 buttonNegative: "Cancel",
-        //                 buttonPositive: "OK"
-        //             }
-        //         )
-        //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        //             console.log("You can use the gallery");
-        //         } else {
-        //             console.log("Gallery permission denied");
-        //         }
-        //     } catch (err) {
-        //         console.warn(err);
-        //     }
-        // };
+      
 
-        const openGallery = async () => {
+          const openGallery = async () => {
             const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
             if (status === "granted") {
-              const result = await ImagePicker.launchImageLibraryAsync();
-              if (!result.cancelled) {
-                console.log("Selected image", result.uri);
-                setImage(result.uri);
-              }
+                const result = await ImagePicker.launchImageLibraryAsync();
+                if (!result.canceled && result.assets.length > 0) {
+                    console.log("Selected image", result.assets[0].uri);
+                    const source = {
+                        uri: result.assets[0].uri,
+                        type: "image/jpg",
+                        name: "image.jpg"
+                    }
+                    handleUpdata(source);
+                }
             } else {
-              console.log("Media library permission denied");
+                console.log("Media library permission denied");
             }
-          };
+        };
+        
           //userId, categoryId, name, description, image, company, barCode
 
-const addProduct = async () => {
-    if(!name || !barCode || !description || !image || !company || !checked){
-        setError("All fields must be filled");
-        return;
-    }
-    const response = await createProduct(user._id, checked, name, description, image, company, barCode);
-    console.log(response);
-    setChecked('');
-    setName('');
-    setDescription('');
-    setCompany('');
-    setBarCode('');
-    setImage('');
-    navigation.navigate("ProductDetails", {
-        productId : response.product["_id"]
-    })
- }  
+          const addProduct = async () => {
+            if (!name || !barCode || !description || !company || !checked) {
+                setError("All fields must be filled");
+                return;
+            }
+            
+            if (image) {
+                try {
+                    
+                    //const uploadedImageUrl = await handleUpdata(image);
+                    //setImageUrl(uploadedImageUrl);
+                    const response = await createProduct(user._id, checked, name, description, image, company, barCode);
+                    
+                    console.log(response);
+                    
+                    setChecked('');
+                    setName('');
+                    setDescription('');
+                    setCompany('');
+                    setBarCode('');
+                    setImage('');
+                    
+                    navigation.navigate("ProductDetails", {
+                        productId: response.product["_id"]
+                    });
+                } catch (error) {
+                    console.error("Error uploading image:", error);
+                    setError("An error occurred while uploading the image");
+                }
+            } else {
+                setError("Please select an image");
+            }
+        }
+        
    return (
        <AccountBackground>
         <AccountCover/>
@@ -208,26 +221,31 @@ const addProduct = async () => {
               </View>
             ))}
           </Spacer>
+          {imageIsLoading ? (
+            <ActivityIndicator animating={true} color="#0000ff" />
+            ) : (
+
           <Spacer size="large">
             <Button onPress={alertOpen}>Add image</Button>
           </Spacer>
+          )}
           <Spacer size="large">
           {error && (
           <ErrorContainer size="large">
            <Text style={{color: 'red'}} variant="error">{error}</Text>
           </ErrorContainer>
         )}
-          {!isLoading ? (
-            <AuthButton
-              icon=""
-              mode="contained"
-              onPress={addProduct}
-            >
-              Add Product
-            </AuthButton>
-          ) : (
-            <ActivityIndicator animating={true}  color="#0000ff" />
-          )}
+          {isLoading || imageIsLoading ? (
+                <ActivityIndicator animating={true} color="#0000ff" />
+                ) : (
+                <AuthButton
+                    icon=""
+                    mode="contained"
+                    onPress={addProduct}
+                >
+                    Add Product
+                </AuthButton>
+                )}
         </Spacer>
             </AccountContainer>
         </ScrollView>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Camera } from "expo-camera";
+import * as FileSystem from "expo-file-system";
 
 export const CameraComponent = ({navigation}) => {
     const [hasPermission, setHasPermission] = useState(null);
@@ -8,22 +9,24 @@ export const CameraComponent = ({navigation}) => {
     const [capturedImageUri, setCapturedImageUri] = useState(null);
   
     useEffect(() => {
+        
       (async () => {
         const { status } = await Camera.requestPermissionsAsync();
         setHasPermission(status === "granted");
       })();
     }, []);
+    
   
     const takePicture = async () => {
-      if (cameraRef.current) {
-        const photo = await cameraRef.current.takePictureAsync();
+        if (cameraRef.current) {
+          const photo = await cameraRef.current.takePictureAsync();
+          setCapturedImageUri(photo.uri);
+          console.log("PHOTO URI:", photo);
+          navigation.navigate("AddProduct", { capturedImageUri: photo.uri });
+        }
+      };
+      
 
-        //console.log("Photo captured", photo);
-        setCapturedImageUri(photo.uri);
-        // Navigate back after taking the photo
-        navigation.navigate("AddProduct", { capturedImageUri: photo.uri });
-      }
-    };
   
     if (hasPermission === null) {
       return <View />;

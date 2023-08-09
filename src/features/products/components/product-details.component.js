@@ -56,8 +56,6 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
   }
 
 
-
-
   
   console.log(productId)
 
@@ -117,7 +115,7 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
             <Menu.Item onPress={() => {}} title="Update product" />
             <Menu.Item onPress={deleteAlert} title="Delete product" />
             <Divider />
-            <Menu.Item onPress={() => {}} title="Add compositions" />
+            <Menu.Item onPress={() => navigation.navigate("AddCompositions", { productId: productId })} title="Add compositions" />
           </Menu> ) : null}
                 {isAuth ? (
                   <>
