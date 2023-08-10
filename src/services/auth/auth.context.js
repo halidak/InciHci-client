@@ -1,6 +1,6 @@
 import React, {useState, useContext, createContext} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { loginRequest, registerRequest, verifyEmail, getUserById, UpdateUserById, changePassword } from "./auth.service";
+import { loginRequest, registerRequest, verifyEmail, getUserById, UpdateUserById, changePassword, forgotPassword, resetPassword } from "./auth.service";
 
 export const AuthContext = createContext();
 
@@ -139,6 +139,38 @@ export const AuthContextProvider = ( {children} ) => {
         }
       };
 
+      const handleForgotPassword = async (email) => {
+        try {
+          setIsLoading(true);
+          const response = await forgotPassword(email);
+          setIsLoading(false);
+          return response;
+        } catch (err) {
+          setIsLoading(false);
+          if (err.response && err.response.status === 400 && err.response.data.message === "Invalid email") {
+            throw new Error("Invalid email.");
+          } else {
+            throw new Error("An error occurred. Please try again later.");
+          }
+        }
+      };
+
+      const handleResetPassword = async (email, verificationCode, newPassword) => {
+        try {
+          setIsLoading(true);
+          const response = await resetPassword(email, verificationCode, newPassword);
+          setIsLoading(false);
+          return response;
+        } catch (err) {
+          setIsLoading(false);
+          if (err.response && err.response.status === 400 && err.response.data.message === "Invalid reset password token") {
+            throw new Error("Invalid reset password token.");
+          } else {
+            throw new Error("An error occurred. Please try again later.");
+          }
+        }
+      };
+
     return (
         <AuthContext.Provider 
         value = {{ 
@@ -154,7 +186,9 @@ export const AuthContextProvider = ( {children} ) => {
             getUser,
             isLoading,
             updateUser,
-            handlePasswordChange
+            handlePasswordChange,
+            handleForgotPassword,
+            handleResetPassword
             }}>
             {children}
         </AuthContext.Provider>

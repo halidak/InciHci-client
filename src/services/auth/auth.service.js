@@ -81,3 +81,31 @@ export const changePassword = async (userId, oldPassword, newPassword) => {
         throw new Error("An error occurred. Please try again later.");
     }
 }
+
+//forgot password
+export const forgotPassword = async (email) => {
+    try {
+        const response = await axios.post(`${API_URL}/sendCode`, {
+            email,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error changing password:", error.response);
+        throw new Error("An error occurred. Please try again later.");
+    }
+}
+
+//reset password
+export const resetPassword = async (email, verificationCode, newPassword) => {
+    try {
+        const response = await axios.post(`${API_URL}/resetPwd`, {
+            email,
+            verificationCode,
+            newPassword,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error changing password:", error.response);
+        throw new Error("An error occurred. Please try again later.");
+    }
+}

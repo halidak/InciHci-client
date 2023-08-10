@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Text, ActivityIndicator,  } from "react-native";
+import { Text, ActivityIndicator,TouchableOpacity  } from "react-native";
 import { AuthContext } from "../../../services/auth/auth.context";
 
 import {
@@ -76,6 +76,11 @@ export const LoginScreen = ({ navigation }) => {
             onChangeText={(p) => setPassword(p)}
             />
             </Spacer>
+            <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+            <Spacer size="large">
+            <Text style={{color: 'blue'}}>Forgot Password?</Text>
+            </Spacer>
+            </TouchableOpacity>
            {error && (
           <ErrorContainer size="large">
             <Text style={{color: 'red'}} variant="error">{error}</Text>
