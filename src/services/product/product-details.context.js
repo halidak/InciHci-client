@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { getProductById, AverageRating, fetchCompositions, fetchComments, sendComment, deleteComment, addCompositions } from "./product-details.service";
+import { getProductById, AverageRating, fetchCompositions, fetchComments, sendComment, deleteComment, addCompositions, updateProduct } from "./product-details.service";
 
 export const ProductDetailsContext = createContext();
 
@@ -117,6 +117,21 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
     }
   }
 
+  const updateProductDetails = async(productId, updatedData) => {
+    try{
+      setIsLoading(true);
+      const response = await updateProduct(productId, updatedData);
+      setIsLoading(false);
+      return response;
+    }
+    catch (err) {
+      console.error("Error updating product:", err);
+      setError(err);
+      setIsLoading(false);
+      throw err;
+    }
+  }
+
  
 
 
@@ -144,7 +159,8 @@ export const ProductDetailsContextProvider = ({ children, productId }) => {
         addComment,
         setComments,
         removeComment,
-        addComp
+        addComp,
+        updateProductDetails
       }}
     >
       {children}

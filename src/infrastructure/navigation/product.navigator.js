@@ -8,6 +8,7 @@ import { ProductDetailsScreen } from "../../features/products/screen/product-det
 
 import { RateProductScreen } from "../../features/products/screen/rate-product.screen";
 import { AddCompositionsScreen } from "../../features/products/screen/add-compositions.screen";
+import { UpdateProductScreen } from "../../features/products/screen/update-product.screen";
 
 const Stack = createStackNavigator();
 
@@ -19,5 +20,6 @@ export const ProductNavigator = () => (
         <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
         <Stack.Screen name="RateProduct" component={RateProductScreen} />
         <Stack.Screen name="AddCompositions" component={AddCompositionsScreen} />
+        <Stack.Screen name="UpdateProduct" component={UpdateProductScreen} />
     </Stack.Navigator>
 );

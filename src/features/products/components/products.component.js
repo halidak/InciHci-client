@@ -46,6 +46,11 @@ export const ProductComponents = ({ categoryId, navigation }) => {
     navigation.navigate("ProductDetails", { productId });
   };
 
+  const applyCacheBust = (imageUrl) => {
+    const cacheBust = Date.now();
+    return imageUrl ? `${imageUrl.replace("/upload/", "/upload/q_20/")}?cache=${cacheBust}` : null;
+  };
+
   return (
     <>
       <Search setSearchQuery={setSearchQuery} />
@@ -57,7 +62,7 @@ export const ProductComponents = ({ categoryId, navigation }) => {
                 {isAuth ? 
                 <Favourite productId={product._id}/> : null
                 }
-                <RestaurantCardCover source={{ uri: product.image }} />
+               <RestaurantCardCover source={{ uri: applyCacheBust(product.image) }} />
               </View>
               <Info>
                 <Title>{product.name}</Title>

@@ -16,7 +16,7 @@ export const AddCompositionsComponent = ({ productId, navigation }) => {
   const { addComp, isLoading } = useContext(ProductDetailsContext); // Ovde koristite useContext
   const [comp, setComp] = useState("");
   const [error, setError] = useState("");
-
+  
   const handleAdd = async () => {
     if (!comp) {
       setError("Input is required");

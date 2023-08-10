@@ -55,7 +55,7 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
     navigation.navigate("Category")
   }
 
-
+  console.log("DETALJI", productDetails)
   
   console.log(productId)
 
@@ -77,9 +77,8 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
     }, [productId])
 );
 
-
   //console.log("Rating:", rating);
-  //console.log('Product Details:', productDetails);
+  console.log('Product Details:', productDetails);
   //console.log('Compositions:', compositions);
   //console.log('Comments:', comments);
 
@@ -87,6 +86,19 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
   if (isLoading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
+
+  //const originalUrl = productDetails.image; // image.url
+//  const insertSegment = "q_20";
+//   const uploadIndex = originalUrl.indexOf("/upload");
+ // const modifiedUrl = originalUrl.slice(0, uploadIndex + "/upload".length) + "/" + insertSegment + originalUrl.slice(uploadIndex + "/upload".length);
+
+   
+const cacheBust = Date.now(); // or any random value
+const modifiedUrl = productDetails && productDetails.image
+  ? `${productDetails.image.replace("/upload/", "/upload/q_20/")}?cache=${cacheBust}`
+  : null;
+
+
 
   return (
     <SafeArea>
@@ -112,7 +124,7 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
               />
             }
           >
-            <Menu.Item onPress={() => {}} title="Update product" />
+            <Menu.Item onPress={() => navigation.navigate("UpdateProduct", {productId: productId})} title="Update product" />
             <Menu.Item onPress={deleteAlert} title="Delete product" />
             <Divider />
             <Menu.Item onPress={() => navigation.navigate("AddCompositions", { productId: productId })} title="Add compositions" />
@@ -132,7 +144,7 @@ export const ProductDetailsComponent = ({ productId, navigation, route }) => {
                       
                   </>
                 ) : null}
-                  <RestaurantCardCover source={{ uri: productDetails.image }} />
+                 <RestaurantCardCover source={{ uri: modifiedUrl }} />
                 </View>
                 <Info>
                   <Title>{productDetails.name}</Title>

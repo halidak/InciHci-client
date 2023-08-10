@@ -93,4 +93,16 @@ export const addCompositions = async (name, productId) => {
     }
 }
 
+export const updateProduct = async (productId, updatedData) => {
+  try {
+    const response = await axios.put(`${API_URL}/products/update/${productId}`, updatedData);
+    console.log("Product updated", response.data);
+    return response.data;
+  }
+  catch (err) {
+    console.error('Error updating product:', err);
+    throw err;
+  }
+}
+
 
