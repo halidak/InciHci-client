@@ -67,3 +67,17 @@ export const UpdateUserById = async (userId, updatedData) => {
         throw new Error("An error occurred. Please try again later.");
     }
 }
+
+//change password
+export const changePassword = async (userId, oldPassword, newPassword) => {
+    try {
+        const response = await axios.put(`${API_URL}/changePwd/${userId}`, {
+            oldPassword,
+            newPassword,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error changing password:", error.response);
+        throw new Error("An error occurred. Please try again later.");
+    }
+}

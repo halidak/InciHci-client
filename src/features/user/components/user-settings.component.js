@@ -58,6 +58,7 @@ export const UserSettings = ({navigation}) => {
         <SettingsItem
           title="Change Password"
           left={() => <List.Icon icon="lock" />}
+          onPress={() => navigation.navigate("ChangePassword")}
           />
         <SettingsItem
             title="Favourites"

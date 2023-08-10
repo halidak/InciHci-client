@@ -1,6 +1,6 @@
 import React, {useState, useContext, createContext} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { loginRequest, registerRequest, verifyEmail, getUserById, UpdateUserById } from "./auth.service";
+import { loginRequest, registerRequest, verifyEmail, getUserById, UpdateUserById, changePassword } from "./auth.service";
 
 export const AuthContext = createContext();
 
@@ -123,6 +123,22 @@ export const AuthContextProvider = ( {children} ) => {
         }
       }
 
+      const handlePasswordChange = async (userId, oldPassword, newPassword) => {
+        try {
+          setIsLoading(true);
+          const response = await changePassword(userId, oldPassword, newPassword);
+          setIsLoading(false);
+          return response;
+        } catch (err) {
+          setIsLoading(false);
+          if (err.response && err.response.status === 400 && err.response.data.message === "Invalid credentials") {
+            throw new Error("Invalid password.");
+          } else {
+            throw new Error("An error occurred. Please try again later.");
+          }
+        }
+      };
+
     return (
         <AuthContext.Provider 
         value = {{ 
@@ -137,7 +153,8 @@ export const AuthContextProvider = ( {children} ) => {
             logged, 
             getUser,
             isLoading,
-            updateUser
+            updateUser,
+            handlePasswordChange
             }}>
             {children}
         </AuthContext.Provider>

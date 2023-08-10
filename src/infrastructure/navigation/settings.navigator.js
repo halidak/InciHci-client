@@ -9,6 +9,7 @@ import { UserFavouritesScreen } from "../../features/user/screen/user-favourites
 import { UserPostedScreen } from "../../features/user/screen/user-posted.screen";
 import { UpdateUserScreen } from "../../features/user/screen/update-user.screen";
 import { UserCameraComponent } from "../../features/user/components/user-camer.compoent";
+import { ChangePasswordScreen } from "../../features/user/screen/change-password.screen";
 
 const SettingsStack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export const SettingsNavigator = () => {
             <SettingsStack.Screen name="UserPosted" component={UserPostedScreen} />
             <SettingsStack.Screen name="UpdateUser" component={UpdateUserScreen} />
             <SettingsStack.Screen name="UserCamera" component={UserCameraComponent} />
+            <SettingsStack.Screen name="ChangePassword" component={ChangePasswordScreen} />
         </SettingsStack.Navigator>
     );
 }
