@@ -19,7 +19,7 @@ export const ForgotPasswordScreen = ({navigation}) => {
         if(!email){
             return;
         }
-        //await handleForgotPassword(email);
+        await handleForgotPassword(email);
         navigation.navigate("ResetPassword", {email: email});
     }
 
