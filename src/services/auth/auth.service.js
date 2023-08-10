@@ -49,3 +49,21 @@ export const verifyEmail = async (verificationCode) => {
         }
     }
 }
+
+export const getUserById = async (userId) => {
+    try {
+        const response = await axios.get(`${API_URL}/getById/${userId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error("An error occurred. Please try again later.");
+    }
+}
+
+export const UpdateUserById = async (userId, updatedData) => {
+    try {
+        const response = await axios.put(`${API_URL}/update/${userId}`, updatedData);
+        return response.data;
+    } catch (error) {
+        throw new Error("An error occurred. Please try again later.");
+    }
+}

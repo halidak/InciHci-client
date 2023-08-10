@@ -1,6 +1,6 @@
 import React, {useState, useContext, createContext} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { loginRequest, registerRequest, verifyEmail } from "./auth.service";
+import { loginRequest, registerRequest, verifyEmail, getUserById, UpdateUserById } from "./auth.service";
 
 export const AuthContext = createContext();
 
@@ -9,6 +9,7 @@ export const AuthContextProvider = ( {children} ) => {
     const [token, setToken] = useState(null);
     const isAuth = !!user;
     const [logged, setIsLogged] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const onAuth = async ({ user, token}) => {
         await AsyncStorage.setItem("user", JSON.stringify(user));
@@ -84,6 +85,44 @@ export const AuthContextProvider = ( {children} ) => {
         }
       }
 
+      const getUser = async(userId) => {
+        try {
+          const response = await getUserById(userId);
+      
+          if (response) {
+            console.log("User found.");
+            return response;
+          } else {
+            throw new Error("Invalid response from the server.");
+          }
+        } catch (err) {
+          if (err.response && err.response.status === 400 && err.response.data.message === "Invalid user ID") {
+            throw new Error("Invalid user ID.");
+          } else {
+            throw new Error("An error occurred. Please try again later.");
+          }
+        }
+      }
+
+      const updateUser = async(userID, updatedData) => {
+        try {
+          const response = await UpdateUserById(userID, updatedData);
+      
+          if (response) {
+            console.log("User updated.");
+            return response;
+          } else {
+            throw new Error("Invalid response from the server.");
+          }
+        } catch (err) {
+          if (err.response && err.response.status === 400 && err.response.data.message === "Invalid user ID") {
+            throw new Error("Invalid user ID.");
+          } else {
+            throw new Error("An error occurred. Please try again later.");
+          }
+        }
+      }
+
     return (
         <AuthContext.Provider 
         value = {{ 
@@ -95,7 +134,10 @@ export const AuthContextProvider = ( {children} ) => {
             handleLogin,
             handleRegister,
             handleVerify,
-            logged
+            logged, 
+            getUser,
+            isLoading,
+            updateUser
             }}>
             {children}
         </AuthContext.Provider>

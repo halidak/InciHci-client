@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { AuthContext } from "../../../services/auth/auth.context";
 import { List, Avatar } from "react-native-paper";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import styled from "styled-components/native";
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const SettingsItem = styled(List.Item)`
   padding: ${(props) => props.theme.space[3]};
@@ -14,7 +16,16 @@ const AvatarContainer = styled.View`
 `;
 
 export const UserSettings = ({navigation}) => {
-  const { isAuth, onLogout, user } = useContext(AuthContext);
+  const { isAuth, onLogout, user, getUser } = useContext(AuthContext);
+  const [loggedUser, setLoggedUser] = useState([]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUser(user._id).then((response) => {
+        setLoggedUser(response);
+      });
+    }, [])
+  );
 
 
   return (
@@ -26,23 +37,23 @@ export const UserSettings = ({navigation}) => {
         {user.image ? (
             <Avatar.Image
             size={150}
-                source={{ uri: user.image }}
+                source={{ uri: loggedUser.image }}
                 backgroundColor="#2182BD"
                 />
                 ): (
-                  <Avatar.Text size={150} label={user.firstName[0]} />
+                  <Avatar.Text size={150} label={loggedUser.firstName[0]} />
                     )}
         <Spacer position="top" size="large">
-          <Text variant="label">{user.firstName} {user.lastName}</Text>
+          <Text variant="label">{loggedUser.firstName} {loggedUser.lastName}</Text>
         </Spacer>
         <Spacer position="top" size="large">
-          <Text variant="label">{user.email}</Text>
+          <Text variant="label">{loggedUser.email}</Text>
         </Spacer>
       </AvatarContainer>
         <SettingsItem
           title="Edit Profile"
           left={() => <List.Icon icon="account" />}
-        onPress={() => console.log("heeej")}
+        onPress={() => navigation.navigate("UpdateUser")}
           />
         <SettingsItem
           title="Change Password"
