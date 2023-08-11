@@ -18,7 +18,7 @@ export const ScannedProductsComponent = ({route, navigation}) => {
         return <ActivityIndicator size="large" color="#0000ff" />;
       }
     
-      if (products.length === 0) {
+      if (!products) {
         return <EmptyProductMessage><Text>No products available.</Text></EmptyProductMessage>;
       }
       
