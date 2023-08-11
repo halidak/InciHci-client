@@ -17,6 +17,8 @@ import { SettingsNavigator } from "./settings.navigator";
 
 import { AddProductNavigator } from "./add-product.navigator";
 
+import { CameraNavigator } from "./camera.navigator";
+
 const Tab = createBottomTabNavigator();
 
 const TAB_ICON = {
@@ -48,7 +50,7 @@ export const AppNavigator = () => {
                 }}
             >
                 <Tab.Screen name="Category" component={ProductNavigator}  options={{ headerShown: false }} />
-                <Tab.Screen name="Camera" component={CameraScreen} />
+                <Tab.Screen name="Camera" component={CameraNavigator} />
                 {isAuth ? (
                     <Tab.Screen name="Add" component={AddProductNavigator} />
                 ) : null}

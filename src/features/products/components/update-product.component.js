@@ -53,13 +53,13 @@ export const UpdateProductComponent = ({productId, navigation}) => {
                 name: productName,
                 description: productDescription,
                 company: productCompany,
-                barcode: productBarcode,
+                barCode: productBarcode,
               };
         
               if (image) {
                 updatedData.image = image;
               }
-
+              console.log("Product Barcode Before Update:", productBarcode);
             await updateProductDetails(productId, updatedData);
             navigation.goBack();
         }
