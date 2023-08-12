@@ -22,7 +22,7 @@ import { CameraNavigator } from "./camera.navigator";
 const Tab = createBottomTabNavigator();
 
 const TAB_ICON = {
-    Camera: "camera-outline",
+    Scanner: "barcode-outline",
     Account: "person-outline",
     Category: "list-outline",
     Settings: "settings",
@@ -50,7 +50,7 @@ export const AppNavigator = () => {
                 }}
             >
                 <Tab.Screen name="Category" component={ProductNavigator}  options={{ headerShown: false }} />
-                <Tab.Screen name="Camera" component={CameraNavigator} />
+                <Tab.Screen name="Scanner" component={CameraNavigator} />
                 {isAuth ? (
                     <Tab.Screen name="Add" component={AddProductNavigator} />
                 ) : null}

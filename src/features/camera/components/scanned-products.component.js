@@ -3,6 +3,7 @@ import { Text, ActivityIndicator, TouchableOpacity, View } from "react-native";
 import { Title, ProductCard, Info, RestaurantCardCover, Open, Row, ProductScrollView, EmptyProductMessage } from "../../products/components/product.style";
 import { AuthContext } from "../../../services/auth/auth.context";
 import { ScannerContext } from "../../../services/product/scanner.context";
+import { Favourite } from "../../products/components/favourites.component";
 
 
 export const ScannedProductsComponent = ({route, navigation}) => {
