@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "InciHci-client",
-    "slug": "InciHci-client",
+    "name": "Inci App",
+    "slug": "Inci-app",
+    "description": "Cosmetic product review application.",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,11 +26,19 @@
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "WRITE_EXTERNAL_STORAGE",
+        "CAMERA_ROLL",
+        "MEDIA_LIBRARY"
       ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "updates": {
+      "enabled": true,
+      "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_LOAD",
+      "useClassicUpdates": true
     }
   }
 }

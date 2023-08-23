@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View, ActivityIndicator  } from "react-native";
 import { AuthContext } from "../../../services/auth/auth.context";
 import { List, Avatar } from "react-native-paper";
 import { Spacer } from "../../../components/spacer/spacer.component";
@@ -17,16 +17,29 @@ const AvatarContainer = styled.View`
 
 export const UserSettings = ({navigation}) => {
   const { isAuth, onLogout, user, getUser } = useContext(AuthContext);
-  const [loggedUser, setLoggedUser] = useState([]);
+  const [loggedUser, setLoggedUser] = useState(null);
 
   useFocusEffect(
     React.useCallback(() => {
-      getUser(user._id).then((response) => {
-        setLoggedUser(response);
-      });
-    }, [])
+      if (user && user._id) {
+        getUser(user._id)
+          .then((response) => {
+            setLoggedUser(response);
+          })
+          .catch((error) => {
+            console.error("Error fetching user:", error);
+          });
+      }
+    }, [user])
   );
 
+  if (!loggedUser) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#2182BD" />
+      </View>
+    );
+  }
 
   return (
     <ScrollView>
@@ -34,7 +47,7 @@ export const UserSettings = ({navigation}) => {
     <View>
       <List.Section>
       <AvatarContainer>
-        {user.image ? (
+        {loggedUser.image ? (
             <Avatar.Image
             size={150}
                 source={{ uri: loggedUser.image }}

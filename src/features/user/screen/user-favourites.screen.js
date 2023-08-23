@@ -11,8 +11,10 @@ export const UserFavouritesScreen = ({ navigation }) => {
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
-        loadFavourites(user._id);
-    }, []);
+        if (user && user._id) {
+            loadFavourites(user._id);
+        }
+    }, [user]);
 
     console.log("Favourites:", favourites);
 
@@ -20,11 +22,12 @@ export const UserFavouritesScreen = ({ navigation }) => {
         navigation.navigate("ProductDetails", { productId });
     };
 
-    if(favourites.likedProducts.length === 0){
+    if (!favourites.likedProducts || favourites.likedProducts.length === 0) {
         return (
             <EmptyProductMessage>No favourites available.</EmptyProductMessage>
-        )
+        );
     }
+    
 
     return (
         <ProductScrollView>

@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect} from "react";
 import { useRoute } from "@react-navigation/native";
-import { ScrollView, Text, View, Alert, PermissionsAndroid, ActivityIndicator } from "react-native";
+import { ScrollView, Text, View, Alert, PermissionsAndroid, ActivityIndicator, Image } from "react-native";
 import { 
     AccountBackground,
     AccountCover,
@@ -21,6 +21,8 @@ import {
  import { ProductContext } from "../../../services/product/product.context";
  import { AuthContext } from "../../../services/auth/auth.context";
  import { useFocusEffect } from "@react-navigation/native";
+ import { FontAwesome } from '@expo/vector-icons';
+
 
 export const AddProductForm = ({navigation, route}) => {
     const [checked, setChecked] = useState('first');
@@ -116,7 +118,7 @@ export const AddProductForm = ({navigation, route}) => {
       
 
           const openGallery = async () => {
-            const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
             if (status === "granted") {
                 const result = await ImagePicker.launchImageLibraryAsync();
                 if (!result.canceled && result.assets.length > 0) {
@@ -128,7 +130,8 @@ export const AddProductForm = ({navigation, route}) => {
                     }
                     handleUpdata(source);
                 }
-            } else {
+            } 
+            else {
                 console.log("Media library permission denied");
             }
         };
@@ -221,14 +224,19 @@ export const AddProductForm = ({navigation, route}) => {
               </View>
             ))}
           </Spacer>
-          {imageIsLoading ? (
-            <ActivityIndicator animating={true} color="#0000ff" />
-            ) : (
-
           <Spacer size="large">
-            <Button onPress={alertOpen}>Add image</Button>
-          </Spacer>
-          )}
+  {imageIsLoading ? (
+    <ActivityIndicator animating={true} color="#0000ff" />
+  ) : (
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {image ? (
+        <FontAwesome name="check" size={20} color="green" style={{ marginRight: 10 }} />
+      ) : null}
+      <Button onPress={alertOpen}>Add image</Button>
+    </View>
+  )}
+</Spacer>
+
           <Spacer size="large">
           {error && (
           <ErrorContainer size="large">
